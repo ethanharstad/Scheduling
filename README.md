@@ -23,8 +23,18 @@ Represents a staff member with:
 - Name and numeric rank
 - Start of service date
 - List of qualifications/certifications
+- Optional scheduling constraints
 
 [View StaffMember Documentation →](./DATA_MODEL.md)
+
+### StaffConstraint
+
+Represents scheduling constraints and preferences:
+- **Time period** with start and end timestamps
+- **Preference level**: unavailable, not preferred, neutral, or preferred
+- Optional reason/note
+
+[View Staff Constraints Documentation →](./STAFF_CONSTRAINTS_MODEL.md)
 
 ### ScheduleRequirement & StaffSlot
 
@@ -94,14 +104,17 @@ Scheduling/
 ├── src/
 │   ├── types/                    # Type definitions
 │   │   ├── StaffMember.ts       # Staff member model
+│   │   ├── StaffConstraint.ts   # Staff constraint model
 │   │   ├── StaffSlot.ts         # Staff slot model
 │   │   ├── ScheduleRequirement.ts  # Schedule requirement model
 │   │   └── index.ts             # Type exports
 │   ├── examples/                # Usage examples
 │   │   ├── staffMemberExample.ts
+│   │   ├── staffConstraintExample.ts
 │   │   └── scheduleRequirementExample.ts
 │   └── index.ts                 # Main entry point
 ├── DATA_MODEL.md                # StaffMember documentation
+├── STAFF_CONSTRAINTS_MODEL.md   # Staff constraints documentation
 ├── SCHEDULE_REQUIREMENTS_MODEL.md  # Schedule requirements documentation
 ├── IMPLEMENTATION_PLAN.md       # Detailed implementation plan
 └── README.md                    # This file
@@ -111,6 +124,7 @@ Scheduling/
 
 - **[Implementation Plan](./IMPLEMENTATION_PLAN.md)** - Comprehensive plan for the scheduling system
 - **[StaffMember Model](./DATA_MODEL.md)** - Staff member data model and API reference
+- **[Staff Constraints Model](./STAFF_CONSTRAINTS_MODEL.md)** - Scheduling constraints and preferences reference
 - **[Schedule Requirements Model](./SCHEDULE_REQUIREMENTS_MODEL.md)** - Schedule requirements and staff slots reference
 
 ## Development
@@ -144,6 +158,7 @@ npm run format
 ### Phase 1: Foundation (Complete)
 - ✅ Project setup and TypeScript configuration
 - ✅ StaffMember data model
+- ✅ StaffConstraint data model with preference levels
 - ✅ StaffSlot and ScheduleRequirement data models
 - ✅ Comprehensive validation and type guards
 - ✅ Utility functions for analysis
@@ -180,6 +195,18 @@ npm run format
 - `hasAllQualifications(member, qualifications)` - Check all qualifications
 - `hasAnyQualification(member, qualifications)` - Check any qualification
 
+### StaffConstraint Functions
+
+- `createStaffConstraint(data)` - Create validated constraint
+- `validateStaffConstraint(constraint)` - Validate and get errors
+- `isStaffConstraint(obj)` - Type guard
+- `hasUnavailableConflict(slotStart, slotEnd, constraints)` - Check for conflicts
+- `getTimeSlotPreference(slotStart, slotEnd, constraints)` - Get preference level
+- `calculatePreferenceScore(slotStart, slotEnd, constraints)` - Get numeric score
+- `getUnavailableConstraints(constraints)` - Get blocking constraints
+- `getPreferredConstraints(constraints)` - Get preferred time periods
+- `getConstraintStats(constraints)` - Get comprehensive statistics
+
 ### StaffSlot Functions
 
 - `createStaffSlot(data)` - Create validated staff slot
@@ -207,6 +234,7 @@ npm run format
 See the [examples](./src/examples/) directory for complete working examples:
 
 - **[staffMemberExample.ts](./src/examples/staffMemberExample.ts)** - Creating and working with staff members
+- **[staffConstraintExample.ts](./src/examples/staffConstraintExample.ts)** - Working with scheduling constraints and preferences
 - **[scheduleRequirementExample.ts](./src/examples/scheduleRequirementExample.ts)** - Creating and analyzing schedule requirements
 
 ## License

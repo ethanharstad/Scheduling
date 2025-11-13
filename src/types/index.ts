@@ -2,6 +2,35 @@
  * Type definitions for the staffing scheduler.
  */
 
+// StaffConstraint types and functions
+export {
+  StaffConstraint,
+  PreferenceLevel,
+  ValidationError as StaffConstraintValidationError,
+  ConstraintStats,
+  isPreferenceLevel,
+  isStaffConstraint,
+  validateStaffConstraint,
+  createStaffConstraint,
+  getConstraintDuration,
+  isTimeInConstraint,
+  doConstraintsOverlap,
+  doesConstraintContainTimeSlot,
+  doesTimeSlotOverlapConstraint,
+  filterConstraintsByPreference,
+  getUnavailableConstraints,
+  getPreferredConstraints,
+  hasUnavailableConflict,
+  getTimeSlotPreference,
+  calculatePreferenceScore,
+  sortConstraintsByStartTime,
+  groupConstraintsByPreference,
+  groupConstraintsByDate,
+  getConstraintsInDateRange,
+  getConstraintStats,
+  getConstraintsSummary,
+} from './StaffConstraint';
+
 // StaffMember types and functions
 export {
   StaffMember,

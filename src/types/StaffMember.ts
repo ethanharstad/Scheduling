@@ -1,3 +1,5 @@
+import { StaffConstraint } from './StaffConstraint';
+
 /**
  * Represents a staff member in the scheduling system.
  */
@@ -23,6 +25,12 @@ export interface StaffMember {
    * Examples: ["RN", "BLS", "ACLS", "Pediatrics"]
    */
   qualifications: string[];
+
+  /**
+   * Optional list of scheduling constraints for this staff member.
+   * Constraints define time periods with preference levels.
+   */
+  constraints?: StaffConstraint[];
 }
 
 /**
@@ -35,13 +43,25 @@ export function isStaffMember(obj: unknown): obj is StaffMember {
 
   const member = obj as Record<string, unknown>;
 
-  return (
+  const basicChecks =
     typeof member.name === 'string' &&
     typeof member.rank === 'number' &&
     member.startOfService instanceof Date &&
     Array.isArray(member.qualifications) &&
-    member.qualifications.every((q) => typeof q === 'string')
-  );
+    member.qualifications.every((q) => typeof q === 'string');
+
+  if (!basicChecks) {
+    return false;
+  }
+
+  // Check optional constraints field
+  if (member.constraints !== undefined) {
+    if (!Array.isArray(member.constraints)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -99,6 +119,17 @@ export function validateStaffMember(member: unknown): ValidationError[] {
     });
   }
 
+  // Validate optional constraints
+  if (m.constraints !== undefined) {
+    if (!Array.isArray(m.constraints)) {
+      errors.push({ field: 'constraints', message: 'constraints must be an array if provided' });
+    } else {
+      // Import validateStaffConstraint would cause circular dependency
+      // So we just check that it's an array here
+      // Full validation can be done separately if needed
+    }
+  }
+
   return errors;
 }
 
@@ -111,6 +142,7 @@ export function createStaffMember(data: {
   rank: number;
   startOfService: Date;
   qualifications: string[];
+  constraints?: StaffConstraint[];
 }): StaffMember {
   const errors = validateStaffMember(data);
 
@@ -124,6 +156,7 @@ export function createStaffMember(data: {
     rank: data.rank,
     startOfService: data.startOfService,
     qualifications: [...data.qualifications], // Create a copy to avoid external mutations
+    constraints: data.constraints ? data.constraints.map((c) => ({ ...c })) : undefined,
   };
 }
 
