@@ -38,11 +38,19 @@ Represents scheduling constraints and preferences:
 
 ### ScheduleRequirement & StaffSlot
 
-Represents scheduling requirements with:
+Represents scheduling requirements (inputs):
 - **StaffSlot**: Individual time slots with required qualifications
 - **ScheduleRequirement**: Collection of slots within a time window
 
 [View Schedule Requirements Documentation →](./SCHEDULE_REQUIREMENTS_MODEL.md)
+
+### StaffAssignment & Schedule
+
+Represents scheduling results (outputs):
+- **StaffAssignment**: Maps a staff member to a staff slot with start/end times
+- **Schedule**: Collection of assignments with unfilled slots tracking
+
+[View Schedule Assignment Documentation →](./SCHEDULE_ASSIGNMENT_MODEL.md)
 
 ## Installation
 
@@ -107,15 +115,19 @@ Scheduling/
 │   │   ├── StaffConstraint.ts   # Staff constraint model
 │   │   ├── StaffSlot.ts         # Staff slot model
 │   │   ├── ScheduleRequirement.ts  # Schedule requirement model
+│   │   ├── StaffAssignment.ts   # Staff assignment model
+│   │   ├── Schedule.ts          # Schedule model
 │   │   └── index.ts             # Type exports
 │   ├── examples/                # Usage examples
 │   │   ├── staffMemberExample.ts
 │   │   ├── staffConstraintExample.ts
-│   │   └── scheduleRequirementExample.ts
+│   │   ├── scheduleRequirementExample.ts
+│   │   └── scheduleExample.ts
 │   └── index.ts                 # Main entry point
 ├── DATA_MODEL.md                # StaffMember documentation
 ├── STAFF_CONSTRAINTS_MODEL.md   # Staff constraints documentation
 ├── SCHEDULE_REQUIREMENTS_MODEL.md  # Schedule requirements documentation
+├── SCHEDULE_ASSIGNMENT_MODEL.md # Schedule assignment documentation
 ├── IMPLEMENTATION_PLAN.md       # Detailed implementation plan
 └── README.md                    # This file
 ```
@@ -126,6 +138,7 @@ Scheduling/
 - **[StaffMember Model](./DATA_MODEL.md)** - Staff member data model and API reference
 - **[Staff Constraints Model](./STAFF_CONSTRAINTS_MODEL.md)** - Scheduling constraints and preferences reference
 - **[Schedule Requirements Model](./SCHEDULE_REQUIREMENTS_MODEL.md)** - Schedule requirements and staff slots reference
+- **[Schedule Assignment Model](./SCHEDULE_ASSIGNMENT_MODEL.md)** - Staff assignments and complete schedules reference
 
 ## Development
 
@@ -159,7 +172,8 @@ npm run format
 - ✅ Project setup and TypeScript configuration
 - ✅ StaffMember data model
 - ✅ StaffConstraint data model with preference levels
-- ✅ StaffSlot and ScheduleRequirement data models
+- ✅ StaffSlot and ScheduleRequirement data models (inputs)
+- ✅ StaffAssignment and Schedule data models (outputs)
 - ✅ Comprehensive validation and type guards
 - ✅ Utility functions for analysis
 
@@ -226,8 +240,35 @@ npm run format
 - `getTotalSlotCount(requirement)` - Get slot count
 - `getTotalRequiredHours(requirement)` - Get total hours
 - `getAllRequiredQualifications(requirement)` - Get unique qualifications
-- `getScheduleStats(requirement)` - Get comprehensive statistics
+- `getRequirementScheduleStats(requirement)` - Get comprehensive statistics
 - `getRequirementSummary(requirement)` - Get formatted summary
+
+### StaffAssignment Functions
+
+- `createStaffAssignment(data)` - Create validated assignment
+- `validateStaffAssignment(assignment)` - Validate and get errors
+- `isStaffAssignment(obj)` - Type guard
+- `getAssignmentDuration(assignment)` - Get duration in hours
+- `doAssignmentsOverlap(assignment1, assignment2)` - Check for overlap
+- `groupAssignmentsByStaff(assignments)` - Group by staff member
+- `groupAssignmentsByDate(assignments)` - Group by date
+- `findAssignmentsForStaff(assignments, staff)` - Find staff assignments
+- `calculateStaffHours(assignments, staff)` - Calculate total hours
+- `getAssignmentStats(assignments)` - Get comprehensive statistics
+
+### Schedule Functions
+
+- `createSchedule(data)` - Create validated schedule
+- `validateSchedule(schedule)` - Validate and get errors
+- `isSchedule(obj)` - Type guard
+- `getTotalAssignments(schedule)` - Get assignment count
+- `getTotalUnfilledSlots(schedule)` - Get unfilled slot count
+- `getScheduleFillRate(schedule)` - Get fill percentage
+- `findScheduleConflicts(schedule)` - Find overlapping assignments
+- `isScheduleValid(schedule)` - Validate no conflicts
+- `getScheduleStats(schedule)` - Get comprehensive statistics
+- `getHoursByStaff(schedule)` - Get hours per staff member
+- `findStaffByHourTarget(schedule, target, tolerance)` - Find over/under utilized staff
 
 ## Examples
 
@@ -236,6 +277,7 @@ See the [examples](./src/examples/) directory for complete working examples:
 - **[staffMemberExample.ts](./src/examples/staffMemberExample.ts)** - Creating and working with staff members
 - **[staffConstraintExample.ts](./src/examples/staffConstraintExample.ts)** - Working with scheduling constraints and preferences
 - **[scheduleRequirementExample.ts](./src/examples/scheduleRequirementExample.ts)** - Creating and analyzing schedule requirements
+- **[scheduleExample.ts](./src/examples/scheduleExample.ts)** - Creating assignments and complete schedules
 
 ## License
 
