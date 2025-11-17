@@ -1,21 +1,103 @@
-# Staffing Scheduler
+# Staff Scheduling Application
 
-A TypeScript-based staffing schedule generator that matches staff members with availability to staffing requirements within a given time window.
+A full-stack TypeScript staffing schedule generator with TanStack Router frontend and comprehensive data models for managing staff assignments, constraints, and scheduling requirements.
 
 ## Overview
 
-This project provides a robust data model and scheduling system for managing staff assignments. It includes comprehensive type definitions, validation, and utility functions for building and analyzing staffing schedules.
+This project provides a robust scheduling system for managing staff assignments with:
+- **TanStack Router** frontend for building the user interface
+- **TypeScript data models** for staff members, requirements, and schedules
+- **Comprehensive validation** with detailed error messages
+- **Flexible qualification matching** and constraint handling
+- **Statistical analysis** of schedules and workload distribution
 
 ## Features
 
-- **Strongly-typed data models** for staff members, schedule requirements, and staff slots
-- **Comprehensive validation** with detailed error messages
-- **Flexible qualification matching** to ensure staff meet requirements
-- **Time-based scheduling** with overlap detection and duration calculations
-- **Statistical analysis** of schedule requirements and workload distribution
-- **Multiple scheduling algorithms** (planned: greedy, balanced, priority-based)
+### Frontend (TanStack Router)
+- Modern React application with TanStack Router
+- Server-side rendering (SSR) support
+- File-based routing
+- Tailwind CSS styling
+- Cloudflare Workers deployment ready
 
-## Data Models
+### Data Models
+- **StaffMember**: Staff information with qualifications and constraints
+- **StaffConstraint**: Time-based availability and preferences
+- **ScheduleRequirement**: Input requirements with time slots
+- **StaffAssignment**: Staff-to-slot mappings
+- **Schedule**: Complete schedules with analytics
+
+## Getting Started
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000)
+
+### Building For Production
+
+```bash
+npm run build
+```
+
+This will:
+1. Build the TypeScript type definitions
+2. Build the frontend application
+
+### Testing
+
+Run all tests:
+
+```bash
+npm run test
+```
+
+Run type model tests:
+
+```bash
+npm run test:types
+```
+
+### Deployment
+
+Deploy to Cloudflare Workers:
+
+```bash
+npm run deploy
+```
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── components/          # React components
+│   ├── routes/              # TanStack Router routes
+│   ├── types/               # TypeScript data models
+│   │   ├── StaffMember.ts
+│   │   ├── StaffConstraint.ts
+│   │   ├── StaffSlot.ts
+│   │   ├── ScheduleRequirement.ts
+│   │   ├── StaffAssignment.ts
+│   │   └── Schedule.ts
+│   ├── __tests__/           # Unit tests for data models
+│   └── examples/            # Example usage
+├── public/                  # Static assets
+└── dist/                    # Build output
+```
+
+## Data Models Documentation
 
 ### StaffMember
 
@@ -52,18 +134,12 @@ Represents scheduling results (outputs):
 
 [View Schedule Assignment Documentation →](./SCHEDULE_ASSIGNMENT_MODEL.md)
 
-## Installation
-
-```bash
-npm install
-```
-
-## Usage
+## Usage Examples
 
 ### Creating Staff Members
 
 ```typescript
-import { createStaffMember } from './types';
+import { createStaffMember } from '@/types';
 
 const staff = createStaffMember({
   name: 'Dr. Sarah Johnson',
@@ -76,9 +152,9 @@ const staff = createStaffMember({
 ### Defining Schedule Requirements
 
 ```typescript
-import { createScheduleRequirement, createStaffSlot } from './types';
+import { createScheduleRequirement, createStaffSlot } from '@/types';
 
-const schedule = createScheduleRequirement({
+const requirement = createScheduleRequirement({
   id: 'week-46-2025',
   name: 'Week of November 17-23, 2025',
   scheduleStart: new Date('2025-11-17T00:00:00'),
@@ -90,202 +166,105 @@ const schedule = createScheduleRequirement({
       endTime: new Date('2025-11-17T15:00:00'),
       requiredQualifications: ['RN', 'BLS'],
     }),
-    // ... more slots
   ],
 });
 ```
 
-### Running Examples
+### Adding Staff Constraints
 
 ```typescript
-// Run the staff member examples
-npx tsx src/examples/staffMemberExample.ts
+import { createStaffConstraint } from '@/types';
 
-// Run the schedule requirement examples
-npx tsx src/examples/scheduleRequirementExample.ts
+const constraint = createStaffConstraint({
+  startTime: new Date('2025-11-20T00:00:00'),
+  endTime: new Date('2025-11-21T23:59:59'),
+  preference: 'unavailable',
+  reason: 'Vacation',
+});
 ```
 
-## Project Structure
+## Routing
 
-```
-Scheduling/
-├── src/
-│   ├── types/                    # Type definitions
-│   │   ├── StaffMember.ts       # Staff member model
-│   │   ├── StaffConstraint.ts   # Staff constraint model
-│   │   ├── StaffSlot.ts         # Staff slot model
-│   │   ├── ScheduleRequirement.ts  # Schedule requirement model
-│   │   ├── StaffAssignment.ts   # Staff assignment model
-│   │   ├── Schedule.ts          # Schedule model
-│   │   └── index.ts             # Type exports
-│   ├── examples/                # Usage examples
-│   │   ├── staffMemberExample.ts
-│   │   ├── staffConstraintExample.ts
-│   │   ├── scheduleRequirementExample.ts
-│   │   └── scheduleExample.ts
-│   └── index.ts                 # Main entry point
-├── DATA_MODEL.md                # StaffMember documentation
-├── STAFF_CONSTRAINTS_MODEL.md   # Staff constraints documentation
-├── SCHEDULE_REQUIREMENTS_MODEL.md  # Schedule requirements documentation
-├── SCHEDULE_ASSIGNMENT_MODEL.md # Schedule assignment documentation
-├── IMPLEMENTATION_PLAN.md       # Detailed implementation plan
-└── README.md                    # This file
+This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
+
+### Adding A Route
+
+To add a new route, create a new file in the `./src/routes` directory:
+
+```tsx
+// src/routes/schedule.tsx
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/schedule')({
+  component: ScheduleComponent,
+});
+
+function ScheduleComponent() {
+  return <div>Schedule Page</div>;
+}
 ```
 
-## Documentation
+### Adding Links
 
-- **[Implementation Plan](./IMPLEMENTATION_PLAN.md)** - Comprehensive plan for the scheduling system
-- **[StaffMember Model](./DATA_MODEL.md)** - Staff member data model and API reference
-- **[Staff Constraints Model](./STAFF_CONSTRAINTS_MODEL.md)** - Scheduling constraints and preferences reference
-- **[Schedule Requirements Model](./SCHEDULE_REQUIREMENTS_MODEL.md)** - Schedule requirements and staff slots reference
-- **[Schedule Assignment Model](./SCHEDULE_ASSIGNMENT_MODEL.md)** - Staff assignments and complete schedules reference
+Use the `Link` component for SPA navigation:
 
-## Development
+```tsx
+import { Link } from '@tanstack/react-router';
 
-### Build
+<Link to="/schedule">View Schedule</Link>
+```
+
+## Styling
+
+This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+
+## Testing
+
+This project uses:
+- [Vitest](https://vitest.dev/) for React component tests
+- [Jest](https://jestjs.io/) for data model unit tests
+
+### Running Tests
 
 ```bash
-npm run build
+# Run all tests
+npm run test
+
+# Run type model tests
+npm run test:types
+
+# Run with coverage
+npm run test -- --coverage
 ```
 
-### Type Checking
+## Tech Stack
 
-```bash
-npx tsc --noEmit
-```
+- **Frontend**: React 19, TanStack Router
+- **Styling**: Tailwind CSS 4
+- **Language**: TypeScript 5.7
+- **Testing**: Vitest, Jest
+- **Deployment**: Cloudflare Workers
+- **Build Tool**: Vite
 
-### Linting
+## Available Scripts
 
-```bash
-npm run lint
-```
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run build:types` - Build TypeScript types
+- `npm run test` - Run tests
+- `npm run test:types` - Run type model tests
+- `npm run deploy` - Deploy to Cloudflare
+- `npm run preview` - Preview production build
+- `npm run lint` - Lint code
+- `npm run format` - Format code with Prettier
 
-### Formatting
+## Implementation Plan
 
-```bash
-npm run format
-```
-
-## Roadmap
-
-### Phase 1: Foundation (Complete)
-- ✅ Project setup and TypeScript configuration
-- ✅ StaffMember data model
-- ✅ StaffConstraint data model with preference levels
-- ✅ StaffSlot and ScheduleRequirement data models (inputs)
-- ✅ StaffAssignment and Schedule data models (outputs)
-- ✅ Comprehensive validation and type guards
-- ✅ Utility functions for analysis
-
-### Phase 2: Core Scheduling (Planned)
-- [ ] Greedy scheduling algorithm
-- [ ] Balanced scheduling algorithm
-- [ ] Priority-based scheduling algorithm
-- [ ] Constraint validation (max hours, consecutive days)
-- [ ] Schedule assignment tracking
-
-### Phase 3: Optimization (Planned)
-- [ ] Workload balancing
-- [ ] Preference handling
-- [ ] Performance optimization
-- [ ] Comprehensive test suite
-
-### Phase 4: Advanced Features (Future)
-- [ ] Recurring schedule patterns
-- [ ] Staff availability tracking
-- [ ] Cost optimization
-- [ ] Calendar export (iCal, etc.)
-- [ ] REST API wrapper
-
-## API Reference
-
-### StaffMember Functions
-
-- `createStaffMember(data)` - Create validated staff member
-- `validateStaffMember(member)` - Validate and get errors
-- `isStaffMember(obj)` - Type guard
-- `calculateYearsOfService(member, asOfDate?)` - Calculate years of service
-- `hasQualification(member, qualification)` - Check single qualification
-- `hasAllQualifications(member, qualifications)` - Check all qualifications
-- `hasAnyQualification(member, qualifications)` - Check any qualification
-
-### StaffConstraint Functions
-
-- `createStaffConstraint(data)` - Create validated constraint
-- `validateStaffConstraint(constraint)` - Validate and get errors
-- `isStaffConstraint(obj)` - Type guard
-- `hasUnavailableConflict(slotStart, slotEnd, constraints)` - Check for conflicts
-- `getTimeSlotPreference(slotStart, slotEnd, constraints)` - Get preference level
-- `calculatePreferenceScore(slotStart, slotEnd, constraints)` - Get numeric score
-- `getUnavailableConstraints(constraints)` - Get blocking constraints
-- `getPreferredConstraints(constraints)` - Get preferred time periods
-- `getConstraintStats(constraints)` - Get comprehensive statistics
-
-### StaffSlot Functions
-
-- `createStaffSlot(data)` - Create validated staff slot
-- `validateStaffSlot(slot)` - Validate and get errors
-- `isStaffSlot(obj)` - Type guard
-- `getSlotDuration(slot)` - Get duration in hours
-- `doSlotsOverlap(slot1, slot2)` - Check for time overlap
-- `isSlotInTimeWindow(slot, start, end)` - Check if in window
-- `groupSlotsByDate(slots)` - Group by date
-- `sortSlotsByStartTime(slots)` - Sort by time
-
-### ScheduleRequirement Functions
-
-- `createScheduleRequirement(data)` - Create validated requirement
-- `validateScheduleRequirement(req)` - Validate and get errors
-- `isScheduleRequirement(obj)` - Type guard
-- `getTotalSlotCount(requirement)` - Get slot count
-- `getTotalRequiredHours(requirement)` - Get total hours
-- `getAllRequiredQualifications(requirement)` - Get unique qualifications
-- `getRequirementScheduleStats(requirement)` - Get comprehensive statistics
-- `getRequirementSummary(requirement)` - Get formatted summary
-
-### StaffAssignment Functions
-
-- `createStaffAssignment(data)` - Create validated assignment
-- `validateStaffAssignment(assignment)` - Validate and get errors
-- `isStaffAssignment(obj)` - Type guard
-- `getAssignmentDuration(assignment)` - Get duration in hours
-- `doAssignmentsOverlap(assignment1, assignment2)` - Check for overlap
-- `groupAssignmentsByStaff(assignments)` - Group by staff member
-- `groupAssignmentsByDate(assignments)` - Group by date
-- `findAssignmentsForStaff(assignments, staff)` - Find staff assignments
-- `calculateStaffHours(assignments, staff)` - Calculate total hours
-- `getAssignmentStats(assignments)` - Get comprehensive statistics
-
-### Schedule Functions
-
-- `createSchedule(data)` - Create validated schedule
-- `validateSchedule(schedule)` - Validate and get errors
-- `isSchedule(obj)` - Type guard
-- `getTotalAssignments(schedule)` - Get assignment count
-- `getTotalUnfilledSlots(schedule)` - Get unfilled slot count
-- `getScheduleFillRate(schedule)` - Get fill percentage
-- `findScheduleConflicts(schedule)` - Find overlapping assignments
-- `isScheduleValid(schedule)` - Validate no conflicts
-- `getScheduleStats(schedule)` - Get comprehensive statistics
-- `getHoursByStaff(schedule)` - Get hours per staff member
-- `findStaffByHourTarget(schedule, target, tolerance)` - Find over/under utilized staff
-
-## Examples
-
-See the [examples](./src/examples/) directory for complete working examples:
-
-- **[staffMemberExample.ts](./src/examples/staffMemberExample.ts)** - Creating and working with staff members
-- **[staffConstraintExample.ts](./src/examples/staffConstraintExample.ts)** - Working with scheduling constraints and preferences
-- **[scheduleRequirementExample.ts](./src/examples/scheduleRequirementExample.ts)** - Creating and analyzing schedule requirements
-- **[scheduleExample.ts](./src/examples/scheduleExample.ts)** - Creating assignments and complete schedules
+For a detailed implementation roadmap, see [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md).
 
 ## License
 
-MIT License - see LICENSE file for details
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
+MIT
 
 ## Author
 
