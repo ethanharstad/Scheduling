@@ -22,6 +22,13 @@
       "when": 1763436395978,
       "tag": "0002_dear_zeigeist",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1763437278189,
+      "tag": "0003_abnormal_blindfold",
+      "breakpoints": true
     }
   ]
 }

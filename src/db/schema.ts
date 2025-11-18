@@ -72,10 +72,11 @@ export type StaffConstraintInsert = typeof staffConstraints.$inferInsert;
 /**
  * Staff slots table schema for D1 database.
  * Represents individual staff slots that need to be filled.
+ * Each slot must be associated with a schedule requirement.
  */
 export const staffSlots = sqliteTable('staff_slots', {
   id: text('id').primaryKey(),
-  scheduleRequirementId: text('schedule_requirement_id'),
+  scheduleRequirementId: text('schedule_requirement_id').notNull(),
   name: text('name').notNull(),
   startTime: integer('start_time', { mode: 'timestamp' }).notNull(),
   endTime: integer('end_time', { mode: 'timestamp' }).notNull(),

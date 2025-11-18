@@ -8,10 +8,10 @@ import type { StaffSlot } from '../types/StaffSlot';
 /**
  * Converts a database row to a StaffSlot object with proper Date conversion
  */
-function rowToStaffSlot(row: typeof staffSlots.$inferSelect): StaffSlot & { id: string; scheduleRequirementId?: string } {
+function rowToStaffSlot(row: typeof staffSlots.$inferSelect): StaffSlot & { id: string; scheduleRequirementId: string } {
   return {
     id: row.id,
-    scheduleRequirementId: row.scheduleRequirementId || undefined,
+    scheduleRequirementId: row.scheduleRequirementId,
     name: row.name,
     startTime: new Date(row.startTime),
     endTime: new Date(row.endTime),

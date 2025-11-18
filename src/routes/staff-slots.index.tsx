@@ -4,7 +4,7 @@ import { Plus, Edit, Trash2, X, Check, Clock, Briefcase } from 'lucide-react';
 
 type StaffSlotWithId = {
   id: string;
-  scheduleRequirementId?: string;
+  scheduleRequirementId: string;
   name: string;
   startTime: Date;
   endTime: Date;
@@ -186,7 +186,7 @@ function SlotFormModal({ slot, onClose, onSuccess }: { slot: StaffSlotWithId | n
 
       const payload = {
         id: formData.id,
-        scheduleRequirementId: formData.scheduleRequirementId || undefined,
+        scheduleRequirementId: formData.scheduleRequirementId,
         name: formData.name,
         startTime: formData.startTime,
         endTime: formData.endTime,
@@ -289,12 +289,14 @@ function SlotFormModal({ slot, onClose, onSuccess }: { slot: StaffSlotWithId | n
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Schedule Requirement ID (optional)</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Schedule Requirement ID</label>
             <input
               type="text"
               value={formData.scheduleRequirementId}
               onChange={(e) => setFormData({ ...formData, scheduleRequirementId: e.target.value })}
+              required
               className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              placeholder="schedule-requirement-id"
             />
           </div>
           <div className="flex justify-end gap-4 pt-4">
