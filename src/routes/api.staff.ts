@@ -8,12 +8,9 @@ export const Route = createFileRoute('/api/staff')({
   server: {
     handlers: {
       // Get all staff members
-      GET: async ({ request }: { request: Request }) => {
+      GET: async () => {
         try {
-          const env = (request as any).cf?.env || (globalThis as any).process?.env;
-          if (!env?.db) {
-            throw new Error('Database binding not available');
-          }
+          const env = process.env as unknown as Env;
           const db = getDb(env.db);
 
           const allStaff = await db.select().from(staffMembers);
@@ -41,10 +38,7 @@ export const Route = createFileRoute('/api/staff')({
       // Create a new staff member
       POST: async ({ request }: { request: Request }) => {
         try {
-          const env = (request as any).cf?.env || (globalThis as any).process?.env;
-          if (!env?.db) {
-            throw new Error('Database binding not available');
-          }
+          const env = process.env as unknown as Env;
           const db = getDb(env.db);
 
           const body = await request.json();

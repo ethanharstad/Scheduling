@@ -8,12 +8,9 @@ export const Route = createFileRoute('/api/staff/$id')({
   server: {
     handlers: {
       // Get a single staff member by ID
-      GET: async ({ params, request }: { params: { id: string }; request: Request }) => {
+      GET: async ({ params }: { params: { id: string } }) => {
         try {
-          const env = (request as any).cf?.env || (globalThis as any).process?.env;
-          if (!env?.db) {
-            throw new Error('Database binding not available');
-          }
+          const env = process.env as unknown as Env;
           const db = getDb(env.db);
 
           const staff = await db
@@ -48,10 +45,7 @@ export const Route = createFileRoute('/api/staff/$id')({
       // Update a staff member
       PUT: async ({ params, request }: { params: { id: string }; request: Request }) => {
         try {
-          const env = (request as any).cf?.env || (globalThis as any).process?.env;
-          if (!env?.db) {
-            throw new Error('Database binding not available');
-          }
+          const env = process.env as unknown as Env;
           const db = getDb(env.db);
 
           const body = await request.json();
@@ -100,12 +94,9 @@ export const Route = createFileRoute('/api/staff/$id')({
       },
 
       // Delete a staff member
-      DELETE: async ({ params, request }: { params: { id: string }; request: Request }) => {
+      DELETE: async ({ params }: { params: { id: string } }) => {
         try {
-          const env = (request as any).cf?.env || (globalThis as any).process?.env;
-          if (!env?.db) {
-            throw new Error('Database binding not available');
-          }
+          const env = process.env as unknown as Env;
           const db = getDb(env.db);
 
           // Check if staff member exists
