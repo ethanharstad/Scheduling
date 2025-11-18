@@ -11,11 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
+import { Route as SchedulesIndexRouteImport } from './routes/schedules.index'
+import { Route as ScheduleRequirementsIndexRouteImport } from './routes/schedule-requirements.index'
 import { Route as ApiStaffRouteImport } from './routes/api.staff'
+import { Route as ApiSchedulesRouteImport } from './routes/api.schedules'
+import { Route as ApiScheduleRequirementsRouteImport } from './routes/api.schedule-requirements'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
 import { Route as ApiStaffIdRouteImport } from './routes/api.staff.$id'
+import { Route as ApiSchedulesIdRouteImport } from './routes/api.schedules.$id'
+import { Route as ApiScheduleRequirementsIdRouteImport } from './routes/api.schedule-requirements.$id'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
 import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
@@ -31,9 +37,30 @@ const StaffIndexRoute = StaffIndexRouteImport.update({
   path: '/staff/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SchedulesIndexRoute = SchedulesIndexRouteImport.update({
+  id: '/schedules/',
+  path: '/schedules/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleRequirementsIndexRoute =
+  ScheduleRequirementsIndexRouteImport.update({
+    id: '/schedule-requirements/',
+    path: '/schedule-requirements/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiStaffRoute = ApiStaffRouteImport.update({
   id: '/api/staff',
   path: '/api/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSchedulesRoute = ApiSchedulesRouteImport.update({
+  id: '/api/schedules',
+  path: '/api/schedules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiScheduleRequirementsRoute = ApiScheduleRequirementsRouteImport.update({
+  id: '/api/schedule-requirements',
+  path: '/api/schedule-requirements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -56,6 +83,17 @@ const ApiStaffIdRoute = ApiStaffIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiStaffRoute,
 } as any)
+const ApiSchedulesIdRoute = ApiSchedulesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiSchedulesRoute,
+} as any)
+const ApiScheduleRequirementsIdRoute =
+  ApiScheduleRequirementsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => ApiScheduleRequirementsRoute,
+  } as any)
 const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
   id: '/demo/start/ssr/',
   path: '/demo/start/ssr/',
@@ -79,8 +117,14 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/schedule-requirements': typeof ApiScheduleRequirementsRouteWithChildren
+  '/api/schedules': typeof ApiSchedulesRouteWithChildren
   '/api/staff': typeof ApiStaffRouteWithChildren
+  '/schedule-requirements': typeof ScheduleRequirementsIndexRoute
+  '/schedules': typeof SchedulesIndexRoute
   '/staff': typeof StaffIndexRoute
+  '/api/schedule-requirements/$id': typeof ApiScheduleRequirementsIdRoute
+  '/api/schedules/$id': typeof ApiSchedulesIdRoute
   '/api/staff/$id': typeof ApiStaffIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -92,8 +136,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/schedule-requirements': typeof ApiScheduleRequirementsRouteWithChildren
+  '/api/schedules': typeof ApiSchedulesRouteWithChildren
   '/api/staff': typeof ApiStaffRouteWithChildren
+  '/schedule-requirements': typeof ScheduleRequirementsIndexRoute
+  '/schedules': typeof SchedulesIndexRoute
   '/staff': typeof StaffIndexRoute
+  '/api/schedule-requirements/$id': typeof ApiScheduleRequirementsIdRoute
+  '/api/schedules/$id': typeof ApiSchedulesIdRoute
   '/api/staff/$id': typeof ApiStaffIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -106,8 +156,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/schedule-requirements': typeof ApiScheduleRequirementsRouteWithChildren
+  '/api/schedules': typeof ApiSchedulesRouteWithChildren
   '/api/staff': typeof ApiStaffRouteWithChildren
+  '/schedule-requirements/': typeof ScheduleRequirementsIndexRoute
+  '/schedules/': typeof SchedulesIndexRoute
   '/staff/': typeof StaffIndexRoute
+  '/api/schedule-requirements/$id': typeof ApiScheduleRequirementsIdRoute
+  '/api/schedules/$id': typeof ApiSchedulesIdRoute
   '/api/staff/$id': typeof ApiStaffIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -121,8 +177,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/schedule-requirements'
+    | '/api/schedules'
     | '/api/staff'
+    | '/schedule-requirements'
+    | '/schedules'
     | '/staff'
+    | '/api/schedule-requirements/$id'
+    | '/api/schedules/$id'
     | '/api/staff/$id'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -134,8 +196,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/schedule-requirements'
+    | '/api/schedules'
     | '/api/staff'
+    | '/schedule-requirements'
+    | '/schedules'
     | '/staff'
+    | '/api/schedule-requirements/$id'
+    | '/api/schedules/$id'
     | '/api/staff/$id'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -147,8 +215,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/api/schedule-requirements'
+    | '/api/schedules'
     | '/api/staff'
+    | '/schedule-requirements/'
+    | '/schedules/'
     | '/staff/'
+    | '/api/schedule-requirements/$id'
+    | '/api/schedules/$id'
     | '/api/staff/$id'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -161,7 +235,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiScheduleRequirementsRoute: typeof ApiScheduleRequirementsRouteWithChildren
+  ApiSchedulesRoute: typeof ApiSchedulesRouteWithChildren
   ApiStaffRoute: typeof ApiStaffRouteWithChildren
+  ScheduleRequirementsIndexRoute: typeof ScheduleRequirementsIndexRoute
+  SchedulesIndexRoute: typeof SchedulesIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
@@ -188,11 +266,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/schedules/': {
+      id: '/schedules/'
+      path: '/schedules'
+      fullPath: '/schedules'
+      preLoaderRoute: typeof SchedulesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule-requirements/': {
+      id: '/schedule-requirements/'
+      path: '/schedule-requirements'
+      fullPath: '/schedule-requirements'
+      preLoaderRoute: typeof ScheduleRequirementsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/staff': {
       id: '/api/staff'
       path: '/api/staff'
       fullPath: '/api/staff'
       preLoaderRoute: typeof ApiStaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/schedules': {
+      id: '/api/schedules'
+      path: '/api/schedules'
+      fullPath: '/api/schedules'
+      preLoaderRoute: typeof ApiSchedulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/schedule-requirements': {
+      id: '/api/schedule-requirements'
+      path: '/api/schedule-requirements'
+      fullPath: '/api/schedule-requirements'
+      preLoaderRoute: typeof ApiScheduleRequirementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -222,6 +328,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/staff/$id'
       preLoaderRoute: typeof ApiStaffIdRouteImport
       parentRoute: typeof ApiStaffRoute
+    }
+    '/api/schedules/$id': {
+      id: '/api/schedules/$id'
+      path: '/$id'
+      fullPath: '/api/schedules/$id'
+      preLoaderRoute: typeof ApiSchedulesIdRouteImport
+      parentRoute: typeof ApiSchedulesRoute
+    }
+    '/api/schedule-requirements/$id': {
+      id: '/api/schedule-requirements/$id'
+      path: '/$id'
+      fullPath: '/api/schedule-requirements/$id'
+      preLoaderRoute: typeof ApiScheduleRequirementsIdRouteImport
+      parentRoute: typeof ApiScheduleRequirementsRoute
     }
     '/demo/start/ssr/': {
       id: '/demo/start/ssr/'
@@ -254,6 +374,32 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ApiScheduleRequirementsRouteChildren {
+  ApiScheduleRequirementsIdRoute: typeof ApiScheduleRequirementsIdRoute
+}
+
+const ApiScheduleRequirementsRouteChildren: ApiScheduleRequirementsRouteChildren =
+  {
+    ApiScheduleRequirementsIdRoute: ApiScheduleRequirementsIdRoute,
+  }
+
+const ApiScheduleRequirementsRouteWithChildren =
+  ApiScheduleRequirementsRoute._addFileChildren(
+    ApiScheduleRequirementsRouteChildren,
+  )
+
+interface ApiSchedulesRouteChildren {
+  ApiSchedulesIdRoute: typeof ApiSchedulesIdRoute
+}
+
+const ApiSchedulesRouteChildren: ApiSchedulesRouteChildren = {
+  ApiSchedulesIdRoute: ApiSchedulesIdRoute,
+}
+
+const ApiSchedulesRouteWithChildren = ApiSchedulesRoute._addFileChildren(
+  ApiSchedulesRouteChildren,
+)
+
 interface ApiStaffRouteChildren {
   ApiStaffIdRoute: typeof ApiStaffIdRoute
 }
@@ -268,7 +414,11 @@ const ApiStaffRouteWithChildren = ApiStaffRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiScheduleRequirementsRoute: ApiScheduleRequirementsRouteWithChildren,
+  ApiSchedulesRoute: ApiSchedulesRouteWithChildren,
   ApiStaffRoute: ApiStaffRouteWithChildren,
+  ScheduleRequirementsIndexRoute: ScheduleRequirementsIndexRoute,
+  SchedulesIndexRoute: SchedulesIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,

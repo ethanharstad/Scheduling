@@ -2,8 +2,10 @@ import { Link } from '@tanstack/react-router'
 
 import { useState } from 'react'
 import {
+  Calendar,
   ChevronDown,
   ChevronRight,
+  ClipboardList,
   Home,
   Menu,
   Network,
@@ -81,6 +83,32 @@ export default function Header() {
           >
             <Users size={20} />
             <span className="font-medium">Staff Management</span>
+          </Link>
+
+          <Link
+            to="/schedules"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            activeProps={{
+              className:
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+            }}
+          >
+            <Calendar size={20} />
+            <span className="font-medium">Schedules</span>
+          </Link>
+
+          <Link
+            to="/schedule-requirements"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            activeProps={{
+              className:
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+            }}
+          >
+            <ClipboardList size={20} />
+            <span className="font-medium">Schedule Requirements</span>
           </Link>
 
           {/* Demo Links Start */}
