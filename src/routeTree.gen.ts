@@ -17,6 +17,7 @@ import { Route as StaffAssignmentsIndexRouteImport } from './routes/staff-assign
 import { Route as SchedulesIndexRouteImport } from './routes/schedules.index'
 import { Route as ScheduleRequirementsIndexRouteImport } from './routes/schedule-requirements.index'
 import { Route as StaffIdRouteImport } from './routes/staff.$id'
+import { Route as ScheduleRequirementsIdRouteImport } from './routes/schedule-requirements.$id'
 import { Route as ApiStaffSlotsRouteImport } from './routes/api.staff-slots'
 import { Route as ApiStaffConstraintsRouteImport } from './routes/api.staff-constraints'
 import { Route as ApiStaffAssignmentsRouteImport } from './routes/api.staff-assignments'
@@ -76,6 +77,11 @@ const ScheduleRequirementsIndexRoute =
 const StaffIdRoute = StaffIdRouteImport.update({
   id: '/staff/$id',
   path: '/staff/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleRequirementsIdRoute = ScheduleRequirementsIdRouteImport.update({
+  id: '/schedule-requirements/$id',
+  path: '/schedule-requirements/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStaffSlotsRoute = ApiStaffSlotsRouteImport.update({
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/api/staff-assignments': typeof ApiStaffAssignmentsRouteWithChildren
   '/api/staff-constraints': typeof ApiStaffConstraintsRouteWithChildren
   '/api/staff-slots': typeof ApiStaffSlotsRouteWithChildren
+  '/schedule-requirements/$id': typeof ScheduleRequirementsIdRoute
   '/staff/$id': typeof StaffIdRoute
   '/schedule-requirements': typeof ScheduleRequirementsIndexRoute
   '/schedules': typeof SchedulesIndexRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/api/staff-assignments': typeof ApiStaffAssignmentsRouteWithChildren
   '/api/staff-constraints': typeof ApiStaffConstraintsRouteWithChildren
   '/api/staff-slots': typeof ApiStaffSlotsRouteWithChildren
+  '/schedule-requirements/$id': typeof ScheduleRequirementsIdRoute
   '/staff/$id': typeof StaffIdRoute
   '/schedule-requirements': typeof ScheduleRequirementsIndexRoute
   '/schedules': typeof SchedulesIndexRoute
@@ -242,6 +250,7 @@ export interface FileRoutesById {
   '/api/staff-assignments': typeof ApiStaffAssignmentsRouteWithChildren
   '/api/staff-constraints': typeof ApiStaffConstraintsRouteWithChildren
   '/api/staff-slots': typeof ApiStaffSlotsRouteWithChildren
+  '/schedule-requirements/$id': typeof ScheduleRequirementsIdRoute
   '/staff/$id': typeof StaffIdRoute
   '/schedule-requirements/': typeof ScheduleRequirementsIndexRoute
   '/schedules/': typeof SchedulesIndexRoute
@@ -273,6 +282,7 @@ export interface FileRouteTypes {
     | '/api/staff-assignments'
     | '/api/staff-constraints'
     | '/api/staff-slots'
+    | '/schedule-requirements/$id'
     | '/staff/$id'
     | '/schedule-requirements'
     | '/schedules'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
     | '/api/staff-assignments'
     | '/api/staff-constraints'
     | '/api/staff-slots'
+    | '/schedule-requirements/$id'
     | '/staff/$id'
     | '/schedule-requirements'
     | '/schedules'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/api/staff-assignments'
     | '/api/staff-constraints'
     | '/api/staff-slots'
+    | '/schedule-requirements/$id'
     | '/staff/$id'
     | '/schedule-requirements/'
     | '/schedules/'
@@ -361,6 +373,7 @@ export interface RootRouteChildren {
   ApiStaffAssignmentsRoute: typeof ApiStaffAssignmentsRouteWithChildren
   ApiStaffConstraintsRoute: typeof ApiStaffConstraintsRouteWithChildren
   ApiStaffSlotsRoute: typeof ApiStaffSlotsRouteWithChildren
+  ScheduleRequirementsIdRoute: typeof ScheduleRequirementsIdRoute
   StaffIdRoute: typeof StaffIdRoute
   ScheduleRequirementsIndexRoute: typeof ScheduleRequirementsIndexRoute
   SchedulesIndexRoute: typeof SchedulesIndexRoute
@@ -433,6 +446,13 @@ declare module '@tanstack/react-router' {
       path: '/staff/$id'
       fullPath: '/staff/$id'
       preLoaderRoute: typeof StaffIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule-requirements/$id': {
+      id: '/schedule-requirements/$id'
+      path: '/schedule-requirements/$id'
+      fullPath: '/schedule-requirements/$id'
+      preLoaderRoute: typeof ScheduleRequirementsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/staff-slots': {
@@ -651,6 +671,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiStaffAssignmentsRoute: ApiStaffAssignmentsRouteWithChildren,
   ApiStaffConstraintsRoute: ApiStaffConstraintsRouteWithChildren,
   ApiStaffSlotsRoute: ApiStaffSlotsRouteWithChildren,
+  ScheduleRequirementsIdRoute: ScheduleRequirementsIdRoute,
   StaffIdRoute: StaffIdRoute,
   ScheduleRequirementsIndexRoute: ScheduleRequirementsIndexRoute,
   SchedulesIndexRoute: SchedulesIndexRoute,
