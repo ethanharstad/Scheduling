@@ -1,36 +1,27 @@
-import { getContext } from 'vinxi/http';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { drizzle as drizzleD1 } from 'drizzle-orm/d1';
+import { drizzle } from 'drizzle-orm/d1';
 import * as schema from './schema';
-
-let devDb: ReturnType<typeof drizzle> | null = null;
 
 /**
  * Get the database instance from the Cloudflare environment.
- * In production: Uses D1 from getContext
- * In development: Uses local SQLite via better-sqlite3
+ * Uses the cloudflare:workers module to access bindings.
  */
 export async function getDatabase() {
-  // Try to get context in production/Cloudflare Workers environment
   try {
-    const cf = getContext('cloudflare');
-    if (cf?.env?.db) {
-      const env = cf.env as Env;
-      return drizzleD1(env.db, { schema });
+    // Import env from cloudflare:workers (available in both dev and production)
+    const { env } = await import('cloudflare:workers');
+    const typedEnv = env as unknown as Env;
+
+    if (typedEnv.db) {
+      return drizzle(typedEnv.db, { schema });
     }
-  } catch (e) {
-    // Context not available in development, use local SQLite
-  }
 
-  // Development mode: use local SQLite database
-  if (!devDb) {
-    // Dynamically import better-sqlite3 only in development
-    const Database = (await import('better-sqlite3')).default;
-    const sqlite = new Database('.wrangler/state/v3/d1/miniflare-D1DatabaseObject/db.sqlite');
-    devDb = drizzle(sqlite, { schema });
-    console.log('Using local SQLite database for development');
+    throw new Error('Database binding "db" not found in environment');
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('not found in environment')) {
+      throw error;
+    }
+    // If cloudflare:workers is not available, throw a helpful error
+    throw new Error('Unable to access Cloudflare bindings. Make sure you are running in a Cloudflare Workers environment.');
   }
-
-  return devDb;
 }
 

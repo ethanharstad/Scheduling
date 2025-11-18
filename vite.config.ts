@@ -21,7 +21,7 @@ const config = defineConfig({
   ],
   build: {
     rollupOptions: {
-      external: ['vinxi/http', 'better-sqlite3'],
+      external: ['vinxi/http', 'cloudflare:workers'],
     },
   },
 })
