@@ -1,17 +1,50 @@
-node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
-count.txt
-.env
-.nitro
-.tanstack
-.wrangler
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+dist-ssr/
+build/
+*.js
+*.d.ts
+*.js.map
 .output
 .vinxi
-todos.json
 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.local
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# TanStack/Cloudflare specific
+.nitro
+.tanstack
+.wrangler
+count.txt
+todos.json
