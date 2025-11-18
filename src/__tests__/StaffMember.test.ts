@@ -13,12 +13,14 @@ describe('StaffMember', () => {
   describe('createStaffMember', () => {
     it('should create a valid staff member', () => {
       const staff = createStaffMember({
+        id: 'staff-001',
         name: 'Dr. Sarah Johnson',
         rank: 5,
         startOfService: new Date('2018-03-15'),
         qualifications: ['MD', 'Emergency Medicine'],
       });
 
+      expect(staff.id).toBe('staff-001');
       expect(staff.name).toBe('Dr. Sarah Johnson');
       expect(staff.rank).toBe(5);
       expect(staff.qualifications).toEqual(['MD', 'Emergency Medicine']);
@@ -26,6 +28,7 @@ describe('StaffMember', () => {
 
     it('should create a staff member with constraints', () => {
       const staff = createStaffMember({
+        id: 'staff-002',
         name: 'Nurse Emily',
         rank: 3,
         startOfService: new Date('2020-01-01'),
@@ -47,6 +50,7 @@ describe('StaffMember', () => {
     it('should throw error for invalid name', () => {
       expect(() =>
         createStaffMember({
+          id: 'staff-003',
           name: '',
           rank: 3,
           startOfService: new Date(),
@@ -58,6 +62,7 @@ describe('StaffMember', () => {
     it('should throw error for negative rank', () => {
       expect(() =>
         createStaffMember({
+          id: 'staff-004',
           name: 'John Doe',
           rank: -1,
           startOfService: new Date(),
@@ -69,6 +74,7 @@ describe('StaffMember', () => {
     it('should throw error for non-finite rank', () => {
       expect(() =>
         createStaffMember({
+          id: 'staff-005',
           name: 'John Doe',
           rank: NaN,
           startOfService: new Date(),
@@ -80,6 +86,7 @@ describe('StaffMember', () => {
     it('should create a copy of qualifications array', () => {
       const quals = ['RN', 'BLS'];
       const staff = createStaffMember({
+        id: 'staff-006',
         name: 'Nurse Jane',
         rank: 2,
         startOfService: new Date(),
@@ -97,6 +104,7 @@ describe('StaffMember', () => {
   describe('validateStaffMember', () => {
     it('should return no errors for valid staff member', () => {
       const errors = validateStaffMember({
+        id: 'staff-007',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date(),
@@ -106,8 +114,21 @@ describe('StaffMember', () => {
       expect(errors).toHaveLength(0);
     });
 
+    it('should return error for missing id', () => {
+      const errors = validateStaffMember({
+        name: 'Dr. Smith',
+        rank: 4,
+        startOfService: new Date(),
+        qualifications: ['MD'],
+      });
+
+      expect(errors.length).toBeGreaterThan(0);
+      expect(errors.some((e) => e.field === 'id')).toBe(true);
+    });
+
     it('should return error for missing name', () => {
       const errors = validateStaffMember({
+        id: 'staff-008',
         rank: 4,
         startOfService: new Date(),
         qualifications: ['MD'],
@@ -119,6 +140,7 @@ describe('StaffMember', () => {
 
     it('should return error for empty name', () => {
       const errors = validateStaffMember({
+        id: 'staff-009',
         name: '   ',
         rank: 4,
         startOfService: new Date(),
@@ -132,6 +154,7 @@ describe('StaffMember', () => {
 
     it('should return error for invalid rank type', () => {
       const errors = validateStaffMember({
+        id: 'staff-010',
         name: 'Dr. Smith',
         rank: '4',
         startOfService: new Date(),
@@ -143,6 +166,7 @@ describe('StaffMember', () => {
 
     it('should return error for non-array qualifications', () => {
       const errors = validateStaffMember({
+        id: 'staff-011',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date(),
@@ -154,6 +178,7 @@ describe('StaffMember', () => {
 
     it('should return error for non-string qualification items', () => {
       const errors = validateStaffMember({
+        id: 'staff-012',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date(),
@@ -167,6 +192,7 @@ describe('StaffMember', () => {
   describe('isStaffMember', () => {
     it('should return true for valid staff member', () => {
       const staff: StaffMember = {
+        id: 'staff-013',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date(),
@@ -187,6 +213,7 @@ describe('StaffMember', () => {
     it('should return false for object missing required fields', () => {
       expect(
         isStaffMember({
+          id: 'staff-014',
           name: 'Dr. Smith',
           rank: 4,
         })
@@ -195,6 +222,7 @@ describe('StaffMember', () => {
 
     it('should return true for staff with constraints', () => {
       const staff: StaffMember = {
+        id: 'staff-015',
         name: 'Nurse Jane',
         rank: 3,
         startOfService: new Date(),
@@ -208,6 +236,7 @@ describe('StaffMember', () => {
     it('should return false if constraints is not an array', () => {
       expect(
         isStaffMember({
+          id: 'staff-016',
           name: 'Nurse Jane',
           rank: 3,
           startOfService: new Date(),
@@ -221,6 +250,7 @@ describe('StaffMember', () => {
   describe('calculateYearsOfService', () => {
     it('should calculate years of service correctly', () => {
       const staff = createStaffMember({
+        id: 'staff-017',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date('2020-01-01'),
@@ -234,6 +264,7 @@ describe('StaffMember', () => {
 
     it('should return 0 for future start date', () => {
       const staff = createStaffMember({
+        id: 'staff-018',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date('2030-01-01'),
@@ -247,6 +278,7 @@ describe('StaffMember', () => {
 
     it('should use current date if no date provided', () => {
       const staff = createStaffMember({
+        id: 'staff-019',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
@@ -261,6 +293,7 @@ describe('StaffMember', () => {
 
     it('should handle leap years', () => {
       const staff = createStaffMember({
+        id: 'staff-020',
         name: 'Dr. Smith',
         rank: 4,
         startOfService: new Date('2020-02-29'), // Leap year
@@ -275,6 +308,7 @@ describe('StaffMember', () => {
 
   describe('hasQualification', () => {
     const staff = createStaffMember({
+      id: 'staff-021',
       name: 'Nurse Jane',
       rank: 3,
       startOfService: new Date(),
@@ -300,6 +334,7 @@ describe('StaffMember', () => {
 
   describe('hasAllQualifications', () => {
     const staff = createStaffMember({
+      id: 'staff-022',
       name: 'Nurse Jane',
       rank: 3,
       startOfService: new Date(),
@@ -330,6 +365,7 @@ describe('StaffMember', () => {
 
   describe('hasAnyQualification', () => {
     const staff = createStaffMember({
+      id: 'staff-023',
       name: 'Nurse Jane',
       rank: 3,
       startOfService: new Date(),

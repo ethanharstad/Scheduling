@@ -5,6 +5,11 @@ import { StaffConstraint } from './StaffConstraint';
  */
 export interface StaffMember {
   /**
+   * Unique identifier for the staff member.
+   */
+  id: string;
+
+  /**
    * The full name of the staff member.
    */
   name: string;
@@ -44,6 +49,7 @@ export function isStaffMember(obj: unknown): obj is StaffMember {
   const member = obj as Record<string, unknown>;
 
   const basicChecks =
+    typeof member.id === 'string' &&
     typeof member.name === 'string' &&
     typeof member.rank === 'number' &&
     member.startOfService instanceof Date &&
@@ -81,6 +87,13 @@ export function validateStaffMember(member: unknown): ValidationError[] {
   }
 
   const m = member as Record<string, unknown>;
+
+  // Validate id
+  if (typeof m.id !== 'string') {
+    errors.push({ field: 'id', message: 'id must be a string' });
+  } else if (m.id.trim().length === 0) {
+    errors.push({ field: 'id', message: 'id cannot be empty' });
+  }
 
   // Validate name
   if (typeof m.name !== 'string') {
@@ -138,6 +151,7 @@ export function validateStaffMember(member: unknown): ValidationError[] {
  * Throws an error if the input is invalid.
  */
 export function createStaffMember(data: {
+  id: string;
   name: string;
   rank: number;
   startOfService: Date;
@@ -152,6 +166,7 @@ export function createStaffMember(data: {
   }
 
   return {
+    id: data.id,
     name: data.name,
     rank: data.rank,
     startOfService: data.startOfService,
