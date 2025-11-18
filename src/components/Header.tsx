@@ -2,10 +2,13 @@ import { Link } from '@tanstack/react-router'
 
 import { useState } from 'react'
 import {
+  Briefcase,
   Calendar,
   ChevronDown,
   ChevronRight,
   ClipboardList,
+  Clock,
+  FileText,
   Home,
   Menu,
   Network,
@@ -109,6 +112,45 @@ export default function Header() {
           >
             <ClipboardList size={20} />
             <span className="font-medium">Schedule Requirements</span>
+          </Link>
+
+          <Link
+            to="/staff-constraints"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            activeProps={{
+              className:
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+            }}
+          >
+            <Clock size={20} />
+            <span className="font-medium">Staff Constraints</span>
+          </Link>
+
+          <Link
+            to="/staff-slots"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            activeProps={{
+              className:
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+            }}
+          >
+            <Briefcase size={20} />
+            <span className="font-medium">Staff Slots</span>
+          </Link>
+
+          <Link
+            to="/staff-assignments"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            activeProps={{
+              className:
+                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+            }}
+          >
+            <FileText size={20} />
+            <span className="font-medium">Staff Assignments</span>
           </Link>
 
           {/* Demo Links Start */}

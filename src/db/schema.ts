@@ -2,6 +2,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import type { StaffAssignment } from '../types/StaffAssignment';
 import type { UnfilledSlot } from '../types/Schedule';
 import type { StaffSlot } from '../types/StaffSlot';
+import type { PreferenceLevel } from '../types/StaffConstraint';
 
 /**
  * Staff members table schema for D1 database.
@@ -51,3 +52,52 @@ export const scheduleRequirements = sqliteTable('schedule_requirements', {
 
 export type ScheduleRequirementRow = typeof scheduleRequirements.$inferSelect;
 export type ScheduleRequirementInsert = typeof scheduleRequirements.$inferInsert;
+
+/**
+ * Staff constraints table schema for D1 database.
+ * Represents scheduling constraints for staff members.
+ */
+export const staffConstraints = sqliteTable('staff_constraints', {
+  id: text('id').primaryKey(),
+  staffMemberId: text('staff_member_id').notNull(),
+  startTime: integer('start_time', { mode: 'timestamp' }).notNull(),
+  endTime: integer('end_time', { mode: 'timestamp' }).notNull(),
+  preference: text('preference').$type<PreferenceLevel>().notNull(),
+  reason: text('reason'),
+});
+
+export type StaffConstraintRow = typeof staffConstraints.$inferSelect;
+export type StaffConstraintInsert = typeof staffConstraints.$inferInsert;
+
+/**
+ * Staff slots table schema for D1 database.
+ * Represents individual staff slots that need to be filled.
+ */
+export const staffSlots = sqliteTable('staff_slots', {
+  id: text('id').primaryKey(),
+  scheduleRequirementId: text('schedule_requirement_id'),
+  name: text('name').notNull(),
+  startTime: integer('start_time', { mode: 'timestamp' }).notNull(),
+  endTime: integer('end_time', { mode: 'timestamp' }).notNull(),
+  requiredQualifications: text('required_qualifications', { mode: 'json' }).$type<string[]>().notNull(),
+});
+
+export type StaffSlotRow = typeof staffSlots.$inferSelect;
+export type StaffSlotInsert = typeof staffSlots.$inferInsert;
+
+/**
+ * Staff assignments table schema for D1 database.
+ * Represents assignments of staff members to slots.
+ */
+export const staffAssignments = sqliteTable('staff_assignments', {
+  id: text('id').primaryKey(),
+  scheduleId: text('schedule_id'),
+  staffMemberId: text('staff_member_id').notNull(),
+  staffSlotId: text('staff_slot_id'),
+  startTime: integer('start_time', { mode: 'timestamp' }).notNull(),
+  endTime: integer('end_time', { mode: 'timestamp' }).notNull(),
+  metadata: text('metadata', { mode: 'json' }).$type<Record<string, unknown>>(),
+});
+
+export type StaffAssignmentRow = typeof staffAssignments.$inferSelect;
+export type StaffAssignmentInsert = typeof staffAssignments.$inferInsert;

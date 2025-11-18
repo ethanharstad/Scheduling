@@ -11,8 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
+import { Route as StaffSlotsIndexRouteImport } from './routes/staff-slots.index'
+import { Route as StaffConstraintsIndexRouteImport } from './routes/staff-constraints.index'
+import { Route as StaffAssignmentsIndexRouteImport } from './routes/staff-assignments.index'
 import { Route as SchedulesIndexRouteImport } from './routes/schedules.index'
 import { Route as ScheduleRequirementsIndexRouteImport } from './routes/schedule-requirements.index'
+import { Route as ApiStaffSlotsRouteImport } from './routes/api.staff-slots'
+import { Route as ApiStaffConstraintsRouteImport } from './routes/api.staff-constraints'
+import { Route as ApiStaffAssignmentsRouteImport } from './routes/api.staff-assignments'
 import { Route as ApiStaffRouteImport } from './routes/api.staff'
 import { Route as ApiSchedulesRouteImport } from './routes/api.schedules'
 import { Route as ApiScheduleRequirementsRouteImport } from './routes/api.schedule-requirements'
@@ -20,6 +26,9 @@ import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.se
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
 import { Route as ApiStaffIdRouteImport } from './routes/api.staff.$id'
+import { Route as ApiStaffSlotsIdRouteImport } from './routes/api.staff-slots.$id'
+import { Route as ApiStaffConstraintsIdRouteImport } from './routes/api.staff-constraints.$id'
+import { Route as ApiStaffAssignmentsIdRouteImport } from './routes/api.staff-assignments.$id'
 import { Route as ApiSchedulesIdRouteImport } from './routes/api.schedules.$id'
 import { Route as ApiScheduleRequirementsIdRouteImport } from './routes/api.schedule-requirements.$id'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
@@ -37,6 +46,21 @@ const StaffIndexRoute = StaffIndexRouteImport.update({
   path: '/staff/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffSlotsIndexRoute = StaffSlotsIndexRouteImport.update({
+  id: '/staff-slots/',
+  path: '/staff-slots/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffConstraintsIndexRoute = StaffConstraintsIndexRouteImport.update({
+  id: '/staff-constraints/',
+  path: '/staff-constraints/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAssignmentsIndexRoute = StaffAssignmentsIndexRouteImport.update({
+  id: '/staff-assignments/',
+  path: '/staff-assignments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SchedulesIndexRoute = SchedulesIndexRouteImport.update({
   id: '/schedules/',
   path: '/schedules/',
@@ -48,6 +72,21 @@ const ScheduleRequirementsIndexRoute =
     path: '/schedule-requirements/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiStaffSlotsRoute = ApiStaffSlotsRouteImport.update({
+  id: '/api/staff-slots',
+  path: '/api/staff-slots',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStaffConstraintsRoute = ApiStaffConstraintsRouteImport.update({
+  id: '/api/staff-constraints',
+  path: '/api/staff-constraints',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStaffAssignmentsRoute = ApiStaffAssignmentsRouteImport.update({
+  id: '/api/staff-assignments',
+  path: '/api/staff-assignments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStaffRoute = ApiStaffRouteImport.update({
   id: '/api/staff',
   path: '/api/staff',
@@ -82,6 +121,21 @@ const ApiStaffIdRoute = ApiStaffIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => ApiStaffRoute,
+} as any)
+const ApiStaffSlotsIdRoute = ApiStaffSlotsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiStaffSlotsRoute,
+} as any)
+const ApiStaffConstraintsIdRoute = ApiStaffConstraintsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiStaffConstraintsRoute,
+} as any)
+const ApiStaffAssignmentsIdRoute = ApiStaffAssignmentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiStaffAssignmentsRoute,
 } as any)
 const ApiSchedulesIdRoute = ApiSchedulesIdRouteImport.update({
   id: '/$id',
@@ -120,11 +174,20 @@ export interface FileRoutesByFullPath {
   '/api/schedule-requirements': typeof ApiScheduleRequirementsRouteWithChildren
   '/api/schedules': typeof ApiSchedulesRouteWithChildren
   '/api/staff': typeof ApiStaffRouteWithChildren
+  '/api/staff-assignments': typeof ApiStaffAssignmentsRouteWithChildren
+  '/api/staff-constraints': typeof ApiStaffConstraintsRouteWithChildren
+  '/api/staff-slots': typeof ApiStaffSlotsRouteWithChildren
   '/schedule-requirements': typeof ScheduleRequirementsIndexRoute
   '/schedules': typeof SchedulesIndexRoute
+  '/staff-assignments': typeof StaffAssignmentsIndexRoute
+  '/staff-constraints': typeof StaffConstraintsIndexRoute
+  '/staff-slots': typeof StaffSlotsIndexRoute
   '/staff': typeof StaffIndexRoute
   '/api/schedule-requirements/$id': typeof ApiScheduleRequirementsIdRoute
   '/api/schedules/$id': typeof ApiSchedulesIdRoute
+  '/api/staff-assignments/$id': typeof ApiStaffAssignmentsIdRoute
+  '/api/staff-constraints/$id': typeof ApiStaffConstraintsIdRoute
+  '/api/staff-slots/$id': typeof ApiStaffSlotsIdRoute
   '/api/staff/$id': typeof ApiStaffIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -139,11 +202,20 @@ export interface FileRoutesByTo {
   '/api/schedule-requirements': typeof ApiScheduleRequirementsRouteWithChildren
   '/api/schedules': typeof ApiSchedulesRouteWithChildren
   '/api/staff': typeof ApiStaffRouteWithChildren
+  '/api/staff-assignments': typeof ApiStaffAssignmentsRouteWithChildren
+  '/api/staff-constraints': typeof ApiStaffConstraintsRouteWithChildren
+  '/api/staff-slots': typeof ApiStaffSlotsRouteWithChildren
   '/schedule-requirements': typeof ScheduleRequirementsIndexRoute
   '/schedules': typeof SchedulesIndexRoute
+  '/staff-assignments': typeof StaffAssignmentsIndexRoute
+  '/staff-constraints': typeof StaffConstraintsIndexRoute
+  '/staff-slots': typeof StaffSlotsIndexRoute
   '/staff': typeof StaffIndexRoute
   '/api/schedule-requirements/$id': typeof ApiScheduleRequirementsIdRoute
   '/api/schedules/$id': typeof ApiSchedulesIdRoute
+  '/api/staff-assignments/$id': typeof ApiStaffAssignmentsIdRoute
+  '/api/staff-constraints/$id': typeof ApiStaffConstraintsIdRoute
+  '/api/staff-slots/$id': typeof ApiStaffSlotsIdRoute
   '/api/staff/$id': typeof ApiStaffIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -159,11 +231,20 @@ export interface FileRoutesById {
   '/api/schedule-requirements': typeof ApiScheduleRequirementsRouteWithChildren
   '/api/schedules': typeof ApiSchedulesRouteWithChildren
   '/api/staff': typeof ApiStaffRouteWithChildren
+  '/api/staff-assignments': typeof ApiStaffAssignmentsRouteWithChildren
+  '/api/staff-constraints': typeof ApiStaffConstraintsRouteWithChildren
+  '/api/staff-slots': typeof ApiStaffSlotsRouteWithChildren
   '/schedule-requirements/': typeof ScheduleRequirementsIndexRoute
   '/schedules/': typeof SchedulesIndexRoute
+  '/staff-assignments/': typeof StaffAssignmentsIndexRoute
+  '/staff-constraints/': typeof StaffConstraintsIndexRoute
+  '/staff-slots/': typeof StaffSlotsIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/api/schedule-requirements/$id': typeof ApiScheduleRequirementsIdRoute
   '/api/schedules/$id': typeof ApiSchedulesIdRoute
+  '/api/staff-assignments/$id': typeof ApiStaffAssignmentsIdRoute
+  '/api/staff-constraints/$id': typeof ApiStaffConstraintsIdRoute
+  '/api/staff-slots/$id': typeof ApiStaffSlotsIdRoute
   '/api/staff/$id': typeof ApiStaffIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -180,11 +261,20 @@ export interface FileRouteTypes {
     | '/api/schedule-requirements'
     | '/api/schedules'
     | '/api/staff'
+    | '/api/staff-assignments'
+    | '/api/staff-constraints'
+    | '/api/staff-slots'
     | '/schedule-requirements'
     | '/schedules'
+    | '/staff-assignments'
+    | '/staff-constraints'
+    | '/staff-slots'
     | '/staff'
     | '/api/schedule-requirements/$id'
     | '/api/schedules/$id'
+    | '/api/staff-assignments/$id'
+    | '/api/staff-constraints/$id'
+    | '/api/staff-slots/$id'
     | '/api/staff/$id'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -199,11 +289,20 @@ export interface FileRouteTypes {
     | '/api/schedule-requirements'
     | '/api/schedules'
     | '/api/staff'
+    | '/api/staff-assignments'
+    | '/api/staff-constraints'
+    | '/api/staff-slots'
     | '/schedule-requirements'
     | '/schedules'
+    | '/staff-assignments'
+    | '/staff-constraints'
+    | '/staff-slots'
     | '/staff'
     | '/api/schedule-requirements/$id'
     | '/api/schedules/$id'
+    | '/api/staff-assignments/$id'
+    | '/api/staff-constraints/$id'
+    | '/api/staff-slots/$id'
     | '/api/staff/$id'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -218,11 +317,20 @@ export interface FileRouteTypes {
     | '/api/schedule-requirements'
     | '/api/schedules'
     | '/api/staff'
+    | '/api/staff-assignments'
+    | '/api/staff-constraints'
+    | '/api/staff-slots'
     | '/schedule-requirements/'
     | '/schedules/'
+    | '/staff-assignments/'
+    | '/staff-constraints/'
+    | '/staff-slots/'
     | '/staff/'
     | '/api/schedule-requirements/$id'
     | '/api/schedules/$id'
+    | '/api/staff-assignments/$id'
+    | '/api/staff-constraints/$id'
+    | '/api/staff-slots/$id'
     | '/api/staff/$id'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -238,8 +346,14 @@ export interface RootRouteChildren {
   ApiScheduleRequirementsRoute: typeof ApiScheduleRequirementsRouteWithChildren
   ApiSchedulesRoute: typeof ApiSchedulesRouteWithChildren
   ApiStaffRoute: typeof ApiStaffRouteWithChildren
+  ApiStaffAssignmentsRoute: typeof ApiStaffAssignmentsRouteWithChildren
+  ApiStaffConstraintsRoute: typeof ApiStaffConstraintsRouteWithChildren
+  ApiStaffSlotsRoute: typeof ApiStaffSlotsRouteWithChildren
   ScheduleRequirementsIndexRoute: typeof ScheduleRequirementsIndexRoute
   SchedulesIndexRoute: typeof SchedulesIndexRoute
+  StaffAssignmentsIndexRoute: typeof StaffAssignmentsIndexRoute
+  StaffConstraintsIndexRoute: typeof StaffConstraintsIndexRoute
+  StaffSlotsIndexRoute: typeof StaffSlotsIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
@@ -266,6 +380,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff-slots/': {
+      id: '/staff-slots/'
+      path: '/staff-slots'
+      fullPath: '/staff-slots'
+      preLoaderRoute: typeof StaffSlotsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-constraints/': {
+      id: '/staff-constraints/'
+      path: '/staff-constraints'
+      fullPath: '/staff-constraints'
+      preLoaderRoute: typeof StaffConstraintsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-assignments/': {
+      id: '/staff-assignments/'
+      path: '/staff-assignments'
+      fullPath: '/staff-assignments'
+      preLoaderRoute: typeof StaffAssignmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedules/': {
       id: '/schedules/'
       path: '/schedules'
@@ -278,6 +413,27 @@ declare module '@tanstack/react-router' {
       path: '/schedule-requirements'
       fullPath: '/schedule-requirements'
       preLoaderRoute: typeof ScheduleRequirementsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/staff-slots': {
+      id: '/api/staff-slots'
+      path: '/api/staff-slots'
+      fullPath: '/api/staff-slots'
+      preLoaderRoute: typeof ApiStaffSlotsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/staff-constraints': {
+      id: '/api/staff-constraints'
+      path: '/api/staff-constraints'
+      fullPath: '/api/staff-constraints'
+      preLoaderRoute: typeof ApiStaffConstraintsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/staff-assignments': {
+      id: '/api/staff-assignments'
+      path: '/api/staff-assignments'
+      fullPath: '/api/staff-assignments'
+      preLoaderRoute: typeof ApiStaffAssignmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/staff': {
@@ -328,6 +484,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/staff/$id'
       preLoaderRoute: typeof ApiStaffIdRouteImport
       parentRoute: typeof ApiStaffRoute
+    }
+    '/api/staff-slots/$id': {
+      id: '/api/staff-slots/$id'
+      path: '/$id'
+      fullPath: '/api/staff-slots/$id'
+      preLoaderRoute: typeof ApiStaffSlotsIdRouteImport
+      parentRoute: typeof ApiStaffSlotsRoute
+    }
+    '/api/staff-constraints/$id': {
+      id: '/api/staff-constraints/$id'
+      path: '/$id'
+      fullPath: '/api/staff-constraints/$id'
+      preLoaderRoute: typeof ApiStaffConstraintsIdRouteImport
+      parentRoute: typeof ApiStaffConstraintsRoute
+    }
+    '/api/staff-assignments/$id': {
+      id: '/api/staff-assignments/$id'
+      path: '/$id'
+      fullPath: '/api/staff-assignments/$id'
+      preLoaderRoute: typeof ApiStaffAssignmentsIdRouteImport
+      parentRoute: typeof ApiStaffAssignmentsRoute
     }
     '/api/schedules/$id': {
       id: '/api/schedules/$id'
@@ -412,13 +589,53 @@ const ApiStaffRouteWithChildren = ApiStaffRoute._addFileChildren(
   ApiStaffRouteChildren,
 )
 
+interface ApiStaffAssignmentsRouteChildren {
+  ApiStaffAssignmentsIdRoute: typeof ApiStaffAssignmentsIdRoute
+}
+
+const ApiStaffAssignmentsRouteChildren: ApiStaffAssignmentsRouteChildren = {
+  ApiStaffAssignmentsIdRoute: ApiStaffAssignmentsIdRoute,
+}
+
+const ApiStaffAssignmentsRouteWithChildren =
+  ApiStaffAssignmentsRoute._addFileChildren(ApiStaffAssignmentsRouteChildren)
+
+interface ApiStaffConstraintsRouteChildren {
+  ApiStaffConstraintsIdRoute: typeof ApiStaffConstraintsIdRoute
+}
+
+const ApiStaffConstraintsRouteChildren: ApiStaffConstraintsRouteChildren = {
+  ApiStaffConstraintsIdRoute: ApiStaffConstraintsIdRoute,
+}
+
+const ApiStaffConstraintsRouteWithChildren =
+  ApiStaffConstraintsRoute._addFileChildren(ApiStaffConstraintsRouteChildren)
+
+interface ApiStaffSlotsRouteChildren {
+  ApiStaffSlotsIdRoute: typeof ApiStaffSlotsIdRoute
+}
+
+const ApiStaffSlotsRouteChildren: ApiStaffSlotsRouteChildren = {
+  ApiStaffSlotsIdRoute: ApiStaffSlotsIdRoute,
+}
+
+const ApiStaffSlotsRouteWithChildren = ApiStaffSlotsRoute._addFileChildren(
+  ApiStaffSlotsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiScheduleRequirementsRoute: ApiScheduleRequirementsRouteWithChildren,
   ApiSchedulesRoute: ApiSchedulesRouteWithChildren,
   ApiStaffRoute: ApiStaffRouteWithChildren,
+  ApiStaffAssignmentsRoute: ApiStaffAssignmentsRouteWithChildren,
+  ApiStaffConstraintsRoute: ApiStaffConstraintsRouteWithChildren,
+  ApiStaffSlotsRoute: ApiStaffSlotsRouteWithChildren,
   ScheduleRequirementsIndexRoute: ScheduleRequirementsIndexRoute,
   SchedulesIndexRoute: SchedulesIndexRoute,
+  StaffAssignmentsIndexRoute: StaffAssignmentsIndexRoute,
+  StaffConstraintsIndexRoute: StaffConstraintsIndexRoute,
+  StaffSlotsIndexRoute: StaffSlotsIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
