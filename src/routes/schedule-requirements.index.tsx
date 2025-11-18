@@ -1,12 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, X, Check, Calendar, ClipboardList, ChevronDown, ChevronRight, Clock, Briefcase } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Check, Calendar, ClipboardList, ChevronDown, ChevronRight, Clock, Briefcase, AlertCircle, Users } from 'lucide-react';
 import type { ScheduleRequirement } from '../types/ScheduleRequirement';
 import type { StaffSlot } from '../types/StaffSlot';
+import type { StaffConstraint, PreferenceLevel } from '../types/StaffConstraint';
 
 type StaffSlotWithId = StaffSlot & {
   id: string;
   scheduleRequirementId: string;
+};
+
+type StaffConstraintWithIds = StaffConstraint & {
+  id: string;
+  staffMemberId: string;
+  staffMemberName?: string;
 };
 
 export const Route = createFileRoute('/schedule-requirements/')({
@@ -24,6 +31,7 @@ function ScheduleRequirementManagement() {
   const [showSlotForm, setShowSlotForm] = useState(false);
   const [editingSlot, setEditingSlot] = useState<StaffSlotWithId | null>(null);
   const [currentRequirementId, setCurrentRequirementId] = useState<string | null>(null);
+  const [overlappingConstraints, setOverlappingConstraints] = useState<Record<string, StaffConstraintWithIds[]>>({});
 
   useEffect(() => {
     loadRequirements();
@@ -160,6 +168,77 @@ function ScheduleRequirementManagement() {
     setCurrentRequirementId(null);
   }
 
+  async function loadOverlappingConstraintsForRequirement(requirementId: string) {
+    try {
+      const requirement = requirements.find(r => r.id === requirementId);
+      if (!requirement) return;
+
+      const [constraintsRes, staffRes] = await Promise.all([
+        fetch('/api/staff-constraints'),
+        fetch('/api/staff')
+      ]);
+
+      if (!constraintsRes.ok || !staffRes.ok) {
+        throw new Error('Failed to load data');
+      }
+
+      const constraints = await constraintsRes.json();
+      const staffMembers = await staffRes.json();
+
+      // Create a map of staff IDs to names
+      const staffMap = new Map(staffMembers.map((s: any) => [s.id, s.name]));
+
+      // Filter constraints that overlap with the requirement's time range
+      const overlapping = constraints
+        .filter((c: any) => {
+          const constraintStart = new Date(c.startTime);
+          const constraintEnd = new Date(c.endTime);
+          return constraintStart < requirement.scheduleEnd && constraintEnd > requirement.scheduleStart;
+        })
+        .map((c: any) => ({
+          ...c,
+          startTime: new Date(c.startTime),
+          endTime: new Date(c.endTime),
+          staffMemberName: staffMap.get(c.staffMemberId) || 'Unknown'
+        }));
+
+      setOverlappingConstraints(prev => ({ ...prev, [requirementId]: overlapping }));
+    } catch (err) {
+      console.error('Error loading overlapping constraints:', err);
+    }
+  }
+
+  function toggleRequirementWithConstraints(requirementId: string) {
+    const newExpanded = new Set(expandedRequirements);
+    if (newExpanded.has(requirementId)) {
+      newExpanded.delete(requirementId);
+    } else {
+      newExpanded.add(requirementId);
+      if (!staffSlots[requirementId]) {
+        loadStaffSlotsForRequirement(requirementId);
+      }
+      if (!overlappingConstraints[requirementId]) {
+        loadOverlappingConstraintsForRequirement(requirementId);
+      }
+    }
+    setExpandedRequirements(newExpanded);
+  }
+
+  function getPreferenceColor(preference: PreferenceLevel): string {
+    switch (preference) {
+      case 'unavailable':
+        return 'bg-red-500/20 text-red-300 border-red-500/50';
+      case 'not_preferred':
+        return 'bg-orange-500/20 text-orange-300 border-orange-500/50';
+      case 'neutral':
+        return 'bg-gray-500/20 text-gray-300 border-gray-500/50';
+      case 'preferred':
+        return 'bg-green-500/20 text-green-300 border-green-500/50';
+      default:
+        return 'bg-gray-500/20 text-gray-300 border-gray-500/50';
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
@@ -192,6 +271,7 @@ function ScheduleRequirementManagement() {
           {requirements.map((requirement) => {
             const isExpanded = expandedRequirements.has(requirement.id);
             const slots = staffSlots[requirement.id] || [];
+            const constraints = overlappingConstraints[requirement.id] || [];
 
             return (
               <div
@@ -202,7 +282,7 @@ function ScheduleRequirementManagement() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => toggleRequirement(requirement.id)}
+                        onClick={() => toggleRequirementWithConstraints(requirement.id)}
                         className="p-1 text-gray-400 hover:text-cyan-400 transition-colors"
                       >
                         {isExpanded ? (
@@ -249,6 +329,10 @@ function ScheduleRequirementManagement() {
                   <div className="flex items-center gap-2 text-gray-400">
                     <ClipboardList className="w-4 h-4" />
                     Staff Slots: {slots.length}
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-400">
+                    <Users className="w-4 h-4" />
+                    Overlapping Constraints: {constraints.length}
                   </div>
                   {requirement.metadata?.description && (
                     <div className="text-gray-400">
@@ -312,6 +396,46 @@ function ScheduleRequirementManagement() {
                         </div>
                       ))
                     )}
+
+                    <div className="pt-4 mt-4 border-t border-slate-600">
+                      <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        Staff Constraints During This Period
+                      </h4>
+                      {constraints.length === 0 ? (
+                        <div className="text-gray-500 text-sm italic py-2">
+                          No staff constraints overlap with this schedule requirement.
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {constraints.map((constraint) => (
+                            <div
+                              key={constraint.id}
+                              className={`border rounded-lg p-3 ${getPreferenceColor(constraint.preference)}`}
+                            >
+                              <div className="flex justify-between items-start">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <AlertCircle className="w-3.5 h-3.5" />
+                                    <span className="font-medium text-sm">{constraint.staffMemberName}</span>
+                                    <span className="text-xs capitalize">({constraint.preference.replace('_', ' ')})</span>
+                                  </div>
+                                  <div className="text-xs space-y-0.5">
+                                    <div className="flex items-center gap-1.5">
+                                      <Clock className="w-3 h-3" />
+                                      {constraint.startTime.toLocaleString()} - {constraint.endTime.toLocaleString()}
+                                    </div>
+                                    {constraint.reason && (
+                                      <div className="italic">Reason: {constraint.reason}</div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
