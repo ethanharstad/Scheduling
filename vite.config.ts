@@ -16,6 +16,11 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  build: {
+    rollupOptions: {
+      external: ['vinxi/http'],
+    },
+  },
 })
 
 export default config
