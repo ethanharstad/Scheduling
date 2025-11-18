@@ -1,8 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { json } from '@tanstack/react-start';
-import { getContext } from 'vinxi/http';
 import { eq } from 'drizzle-orm';
-import { getDb } from '../db';
+import { getDatabase } from '../db/context';
 import { staffMembers } from '../db/schema';
 
 export const Route = createFileRoute('/api/staff/$id')({
@@ -11,9 +10,7 @@ export const Route = createFileRoute('/api/staff/$id')({
       // Get a single staff member by ID
       GET: async ({ params }: { params: { id: string } }) => {
         try {
-          const cf = getContext('cloudflare');
-          const env = cf.env as Env;
-          const db = getDb(env.db);
+          const db = await getDatabase();
 
           const staff = await db
             .select()
@@ -47,9 +44,7 @@ export const Route = createFileRoute('/api/staff/$id')({
       // Update a staff member
       PUT: async ({ params, request }: { params: { id: string }; request: Request }) => {
         try {
-          const cf = getContext('cloudflare');
-          const env = cf.env as Env;
-          const db = getDb(env.db);
+          const db = await getDatabase();
 
           const body = await request.json();
 
@@ -99,9 +94,7 @@ export const Route = createFileRoute('/api/staff/$id')({
       // Delete a staff member
       DELETE: async ({ params }: { params: { id: string } }) => {
         try {
-          const cf = getContext('cloudflare');
-          const env = cf.env as Env;
-          const db = getDb(env.db);
+          const db = await getDatabase();
 
           // Check if staff member exists
           const existing = await db

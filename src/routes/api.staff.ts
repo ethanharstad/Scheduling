@@ -1,8 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { json } from '@tanstack/react-start';
-import { getContext } from 'vinxi/http';
-import { eq } from 'drizzle-orm';
-import { getDb } from '../db';
+import { getDatabase } from '../db/context';
 import { staffMembers } from '../db/schema';
 
 export const Route = createFileRoute('/api/staff')({
@@ -11,9 +9,7 @@ export const Route = createFileRoute('/api/staff')({
       // Get all staff members
       GET: async () => {
         try {
-          const cf = getContext('cloudflare');
-          const env = cf.env as Env;
-          const db = getDb(env.db);
+          const db = await getDatabase();
 
           const allStaff = await db.select().from(staffMembers);
 
@@ -40,9 +36,7 @@ export const Route = createFileRoute('/api/staff')({
       // Create a new staff member
       POST: async ({ request }: { request: Request }) => {
         try {
-          const cf = getContext('cloudflare');
-          const env = cf.env as Env;
-          const db = getDb(env.db);
+          const db = await getDatabase();
 
           const body = await request.json();
 

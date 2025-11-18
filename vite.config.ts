@@ -18,7 +18,7 @@ const config = defineConfig({
   ],
   build: {
     rollupOptions: {
-      external: ['vinxi/http'],
+      external: ['vinxi/http', 'wrangler'],
     },
   },
 })
