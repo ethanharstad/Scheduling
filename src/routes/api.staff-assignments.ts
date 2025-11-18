@@ -53,18 +53,21 @@ export const Route = createFileRoute('/api/staff-assignments')({
           const body = await request.json();
 
           // Validate required fields
-          if (!body.id || !body.staffMemberId || !body.startTime || !body.endTime) {
+          if (!body.staffMemberId || !body.startTime || !body.endTime) {
             return json(
-              { error: 'Missing required fields: id, staffMemberId, startTime, endTime' },
+              { error: 'Missing required fields: staffMemberId, startTime, endTime' },
               { status: 400 }
             );
           }
+
+          // Generate UUID if id is not provided
+          const id = body.id || crypto.randomUUID();
 
           // Insert the new staff assignment
           const newAssignment = await db
             .insert(staffAssignments)
             .values({
-              id: body.id,
+              id,
               scheduleId: body.scheduleId,
               staffMemberId: body.staffMemberId,
               staffSlotId: body.staffSlotId,

@@ -48,18 +48,21 @@ export const Route = createFileRoute('/api/staff-slots')({
           const body = await request.json();
 
           // Validate required fields
-          if (!body.id || !body.name || !body.startTime || !body.endTime || !body.requiredQualifications || !body.scheduleRequirementId) {
+          if (!body.name || !body.startTime || !body.endTime || !body.requiredQualifications || !body.scheduleRequirementId) {
             return json(
-              { error: 'Missing required fields: id, name, startTime, endTime, requiredQualifications, scheduleRequirementId' },
+              { error: 'Missing required fields: name, startTime, endTime, requiredQualifications, scheduleRequirementId' },
               { status: 400 }
             );
           }
+
+          // Generate UUID if id is not provided
+          const id = body.id || crypto.randomUUID();
 
           // Insert the new staff slot
           const newSlot = await db
             .insert(staffSlots)
             .values({
-              id: body.id,
+              id,
               scheduleRequirementId: body.scheduleRequirementId,
               name: body.name,
               startTime: new Date(body.startTime),

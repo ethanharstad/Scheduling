@@ -402,7 +402,6 @@ interface RequirementFormModalProps {
 
 function RequirementFormModal({ requirement, onClose, onSuccess }: RequirementFormModalProps) {
   const [formData, setFormData] = useState({
-    id: requirement?.id || '',
     name: requirement?.name || '',
     scheduleStart: requirement?.scheduleStart
       ? requirement.scheduleStart.toISOString().split('T')[0]
@@ -421,7 +420,7 @@ function RequirementFormModal({ requirement, onClose, onSuccess }: RequirementFo
 
     try {
       const payload = {
-        id: formData.id,
+        ...(requirement ? { id: requirement.id } : {}),
         name: formData.name || undefined,
         scheduleStart: formData.scheduleStart,
         scheduleEnd: formData.scheduleEnd,
@@ -475,21 +474,6 @@ function RequirementFormModal({ requirement, onClose, onSuccess }: RequirementFo
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              ID
-            </label>
-            <input
-              type="text"
-              value={formData.id}
-              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-              required
-              disabled={!!requirement}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              placeholder="unique-id"
-            />
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Name (optional)
@@ -571,7 +555,6 @@ interface StaffSlotFormModalProps {
 
 function StaffSlotFormModal({ slot, scheduleRequirementId, onClose, onSuccess }: StaffSlotFormModalProps) {
   const [formData, setFormData] = useState({
-    id: slot?.id || '',
     scheduleRequirementId: slot?.scheduleRequirementId || scheduleRequirementId || '',
     name: slot?.name || '',
     startTime: slot?.startTime
@@ -597,7 +580,7 @@ function StaffSlotFormModal({ slot, scheduleRequirementId, onClose, onSuccess }:
         .filter((q) => q.length > 0);
 
       const payload = {
-        id: formData.id,
+        ...(slot ? { id: slot.id } : {}),
         scheduleRequirementId: formData.scheduleRequirementId,
         name: formData.name,
         startTime: formData.startTime,
@@ -646,18 +629,6 @@ function StaffSlotFormModal({ slot, scheduleRequirementId, onClose, onSuccess }:
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">ID</label>
-            <input
-              type="text"
-              value={formData.id}
-              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-              required
-              disabled={!!slot}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50"
-              placeholder="unique-id"
-            />
-          </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Schedule Requirement ID</label>
             <input

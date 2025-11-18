@@ -65,18 +65,21 @@ export const Route = createFileRoute('/api/schedules')({
           const body = await request.json();
 
           // Validate required fields
-          if (!body.id || !body.scheduleStart || !body.scheduleEnd || !body.assignments) {
+          if (!body.scheduleStart || !body.scheduleEnd || !body.assignments) {
             return json(
-              { error: 'Missing required fields: id, scheduleStart, scheduleEnd, assignments' },
+              { error: 'Missing required fields: scheduleStart, scheduleEnd, assignments' },
               { status: 400 }
             );
           }
+
+          // Generate UUID if id is not provided
+          const id = body.id || crypto.randomUUID();
 
           // Insert the new schedule
           const newSchedule = await db
             .insert(schedules)
             .values({
-              id: body.id,
+              id,
               name: body.name,
               scheduleStart: new Date(body.scheduleStart),
               scheduleEnd: new Date(body.scheduleEnd),

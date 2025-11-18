@@ -324,7 +324,6 @@ interface StaffFormModalProps {
 
 function StaffFormModal({ staff, onClose, onSuccess }: StaffFormModalProps) {
   const [formData, setFormData] = useState({
-    id: staff?.id || '',
     name: staff?.name || '',
     rank: staff?.rank || 0,
     startOfService: staff?.startOfService
@@ -347,7 +346,7 @@ function StaffFormModal({ staff, onClose, onSuccess }: StaffFormModalProps) {
         .filter((q) => q.length > 0);
 
       const payload = {
-        id: formData.id,
+        ...(staff ? { id: staff.id } : {}),
         name: formData.name,
         rank: Number(formData.rank),
         startOfService: formData.startOfService,
@@ -401,21 +400,6 @@ function StaffFormModal({ staff, onClose, onSuccess }: StaffFormModalProps) {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              ID
-            </label>
-            <input
-              type="text"
-              value={formData.id}
-              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-              required
-              disabled={!!staff}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              placeholder="unique-id"
-            />
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Name
@@ -516,7 +500,6 @@ interface ConstraintFormModalProps {
 
 function ConstraintFormModal({ constraint, staffId, onClose, onSuccess }: ConstraintFormModalProps) {
   const [formData, setFormData] = useState({
-    id: constraint?.id || '',
     staffMemberId: constraint?.staffMemberId || staffId || '',
     startTime: constraint?.startTime
       ? new Date(constraint.startTime.getTime() - constraint.startTime.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
@@ -537,7 +520,7 @@ function ConstraintFormModal({ constraint, staffId, onClose, onSuccess }: Constr
 
     try {
       const payload = {
-        id: formData.id,
+        ...(constraint ? { id: constraint.id } : {}),
         staffMemberId: formData.staffMemberId,
         startTime: formData.startTime,
         endTime: formData.endTime,
@@ -586,18 +569,6 @@ function ConstraintFormModal({ constraint, staffId, onClose, onSuccess }: Constr
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">ID</label>
-            <input
-              type="text"
-              value={formData.id}
-              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-              required
-              disabled={!!constraint}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50"
-              placeholder="unique-id"
-            />
-          </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Staff Member ID</label>
             <input

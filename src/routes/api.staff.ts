@@ -41,18 +41,21 @@ export const Route = createFileRoute('/api/staff')({
           const body = await request.json();
 
           // Validate required fields
-          if (!body.id || !body.name || body.rank === undefined || !body.startOfService || !body.qualifications) {
+          if (!body.name || body.rank === undefined || !body.startOfService || !body.qualifications) {
             return json(
-              { error: 'Missing required fields: id, name, rank, startOfService, qualifications' },
+              { error: 'Missing required fields: name, rank, startOfService, qualifications' },
               { status: 400 }
             );
           }
+
+          // Generate UUID if id is not provided
+          const id = body.id || crypto.randomUUID();
 
           // Insert the new staff member
           const newStaff = await db
             .insert(staffMembers)
             .values({
-              id: body.id,
+              id,
               name: body.name,
               rank: body.rank,
               startOfService: new Date(body.startOfService),

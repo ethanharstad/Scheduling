@@ -48,18 +48,21 @@ export const Route = createFileRoute('/api/staff-constraints')({
           const body = await request.json();
 
           // Validate required fields
-          if (!body.id || !body.staffMemberId || !body.startTime || !body.endTime || !body.preference) {
+          if (!body.staffMemberId || !body.startTime || !body.endTime || !body.preference) {
             return json(
-              { error: 'Missing required fields: id, staffMemberId, startTime, endTime, preference' },
+              { error: 'Missing required fields: staffMemberId, startTime, endTime, preference' },
               { status: 400 }
             );
           }
+
+          // Generate UUID if id is not provided
+          const id = body.id || crypto.randomUUID();
 
           // Insert the new staff constraint
           const newConstraint = await db
             .insert(staffConstraints)
             .values({
-              id: body.id,
+              id,
               staffMemberId: body.staffMemberId,
               startTime: new Date(body.startTime),
               endTime: new Date(body.endTime),
